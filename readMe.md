@@ -161,3 +161,304 @@ Regular users have limited access with a focus on borrowing and viewing books:
 4. **Books Returned** :
 
 <img width="1439" alt="Screenshot 2024-07-25 at 4 00 35 PM" src="https://github.com/user-attachments/assets/8f28e1de-ee8a-4323-ac6f-780547a7b0ae">
+
+
+
+
+## API Documentation :
+
+### User Authentication:
+
+  1. **Register a New User:**
+
+
+     - URL: /signup
+     - Method: POST
+     - Request Body:
+
+  ```sh
+    {
+        "firstname": "John",
+        "lastname" : "Doe"
+        "email": "john.doe@example.com",
+        "password": "password123"
+      }
+  ```
+
+  -Success Response:
+  ```sh
+    {
+        message : "Registered Successfully"
+      }
+  ```
+
+2. **User Login:**
+
+
+     - URL: /login
+     - Method: POST
+     - Request Body:
+```sh
+  {
+  "email": "john.doe@example.com",
+  "password": "password123"
+  }
+```
+  -Success Response:
+```sh
+  {
+    message : "Login Successfully",
+    data : {
+            token : "Token String generated from JWT",
+            userID : "User ID String"
+          }
+  }
+```
+
+3. **Admin Login:**
+
+
+     - URL: /adminLogin
+     - Method: POST
+     - Request Body:
+```sh
+  {
+  "email": "john.doe@example.com",
+  "password": "password123"
+  }
+```
+  -Success Response:
+```sh
+  {
+    message : "Login Successfully",
+    data : {
+            token : "Token String generated from JWT",
+            userID : "User ID String"
+          }
+  }
+```
+#### USER APIs
+
+1. **Get All Books** :
+
+
+     - URL: /api/availableBooks
+     - Method: GET
+     - Request Body:
+```sh
+  {
+  headers : {
+              authorization : "Token String Value"
+                }
+  }
+```
+  -Success Response:
+```sh
+  {
+    "message": "Available books retrieved",
+    "data": [
+        {
+            "_id": "66a118cb91ffb2ae9eae0568",
+            "title": "The Shadow Work Journal",
+            "author": "Keila Shaheen",
+            "ISBN": "9798989296101",
+            "genre": "Self-help book",
+            "available_copies": 3,
+            "__v": 0
+        },
+        ...
+    ]
+}
+  
+```
+2. **Borrow Book** :
+
+
+- URL: api/borrowBook
+     - Method: POST
+     - Request Body:
+```sh
+  {
+  headers : {
+              authorization : "Token String Value"
+                }
+  },
+{
+bookID : "66a118cb91ffb2ae9eae0568"
+dueDate : "2024-07-28T18:30:00.000Z"
+memberID : "66a12d5e9a0a3d3816d7d7fa"
+}
+```
+  -Success Response:
+```sh
+  {
+    "message": "Book borrowed successfully",
+    "data": {
+        "bookID": "66a118cb91ffb2ae9eae0568",
+        "memberID": "66a12d5e9a0a3d3816d7d7fa",
+        "dueDate": "2024-07-28T18:30:00.000Z",
+        "fine": 0,
+        "_id": "66a24ab148083f9dca9c4e9f",
+        "borrowDate": "2024-07-25T12:53:05.549Z",
+        "__v": 0
+    }
+}
+  
+```
+
+2. **Books Borrowed** : 
+
+
+
+     - URL: /api/borrowedBooks
+     - Method: GET
+     - Request Body:
+```sh
+  {
+  headers : {
+              authorization : "Token String Value"
+                }
+  },
+{
+memberID: "66a12d5e9a0a3d3816d7d7fa"
+}
+```
+  -Success Response:
+```sh
+  {
+    "data": [
+        {
+            "_id": "66a141d25d13a36f8d7dbc10",
+            "bookID": {
+                "_id": "66a1197a91ffb2ae9eae056e",
+                "title": "I Don't Love You Anymore",
+                "author": "Rithvik Singh",
+                "ISBN": "9798892772280",
+                "genre": "Poetry",
+                "available_copies": 14,
+                "__v": 0
+            },
+            "memberID": {
+                "_id": "66a12d5e9a0a3d3816d7d7fa",
+                "name": "Dhoni",
+                "email": "Dhoni@gmail.com",
+                "password": "$2b$10$53czQdWEg2J42Ar748xmpuRXzNm7k5n2jJ0fP5vUK6FU4g70I4sry",
+                "address": "test",
+                "phone_number": "1234567890",
+                "__v": 0
+            },
+            "dueDate": "2024-07-21T00:00:00.000Z",
+            "fine": 500,
+            "borrowDate": "2024-07-24T18:02:58.735Z",
+            "__v": 0
+        },
+        ...
+    ]
+}
+  
+```
+
+4. **Return Book** :
+
+
+
+     - URL: /api/returnBook
+     - Method: POST
+     - Request Body:
+```sh
+  {
+  headers : {
+              authorization : "Token String Value"
+                }
+  },
+{
+bookID : "66a1197a91ffb2ae9eae056e"
+memberID : "66a12d5e9a0a3d3816d7d7fa"
+}
+```
+  -Success Response:
+```sh
+  {
+    "message": "Book returned successfully",
+    "data": {
+        "_id": "66a141d25d13a36f8d7dbc10",
+        "bookID": "66a1197a91ffb2ae9eae056e",
+        "memberID": "66a12d5e9a0a3d3816d7d7fa",
+        "dueDate": "2024-07-21T00:00:00.000Z",
+        "fine": 500,
+        "borrowDate": "2024-07-24T18:02:58.735Z",
+        "__v": 0,
+        "returnDate": "2024-07-25T12:56:34.230Z"
+    },
+    "fine": 500
+}
+  
+```
+
+5. **Books Returned** :
+
+
+
+     - URL: /api/returnedBooks
+     - Method: POST
+     - Request Body:
+```sh
+  {
+  headers : {
+              authorization : "Token String Value"
+                }
+  },
+{
+memberID : "66a12d5e9a0a3d3816d7d7fa"
+}
+```
+  -Success Response:
+```sh
+  {
+    "data": [
+        {
+            "_id": "66a136e1bb092f9ea78ddefb",
+            "bookID": {
+                "_id": "66a1193191ffb2ae9eae056b",
+                "title": "Sick Fux",
+                "author": "Tillie Cole",
+                "ISBN": "978-1977983077",
+                "genre": "Contemporary romance",
+                "available_copies": 1,
+                "__v": 0
+            },
+            "memberID": {
+                "_id": "66a12d5e9a0a3d3816d7d7fa",
+                "name": "Dhoni",
+                "email": "Dhoni@gmail.com",
+                "password": "$2b$10$53czQdWEg2J42Ar748xmpuRXzNm7k5n2jJ0fP5vUK6FU4g70I4sry",
+                "address": "test",
+                "phone_number": "1234567890",
+                "__v": 0
+            },
+            "dueDate": "2024-07-26T00:00:00.000Z",
+            "fine": 0,
+            "borrowDate": "2024-07-24T17:16:17.717Z",
+            "__v": 0,
+            "returnDate": "2024-07-25T05:27:09.182Z"
+        },
+        ...
+    ]
+}
+  
+```
+
+#### Admin APIs :
+
+
+
+
+
+
+## Additional Notes
+
+- **Initial Login:** When starting the web application, it directs to the login page. Make sure to sign up first if you don't have an account and If you want login as Admin please contact me 
+- **Required Technologies:** Ensure that the device running the web application has all the required technologies installed, including Node.js, MongoDB, and any other dependencies listed in the `package.json` files.
+- **Troubleshooting:** If you encounter any issues or if something doesn't work as expected, please feel free to contact me at shashankalampally143@gmail.com.
+
+These notes should help users get started with the project and address any potential issues they might face during setup and usage.
